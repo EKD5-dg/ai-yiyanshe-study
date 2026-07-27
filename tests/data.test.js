@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import trigrams from '../src/data/trigrams.json'
 import hexagrams from '../src/data/hexagrams.json'
+import lessons from '../src/data/lessons.json'
+import fengshui from '../src/data/fengshui.json'
+import quiz from '../src/data/quiz.json'
+import badges from '../src/data/badges.json'
 
 // 文王卦序标准表：kingWen[lowerKey][upperKey] = 卦序号
 const kingWen = {
@@ -53,5 +57,69 @@ describe('hexagrams.json', () => {
       expect(h.plain.length).toBeGreaterThan(10)
       expect(h.fun.length).toBeGreaterThan(4)
     }
+  })
+})
+
+describe('lessons.json', () => {
+  it('20 关、每关 3 题、答案下标合法', () => {
+    expect(lessons).toHaveLength(20)
+    for (const l of lessons) {
+      expect(l.questions).toHaveLength(3)
+      expect(l.content.length).toBeGreaterThanOrEqual(2)
+      for (const q of l.questions) {
+        expect(q.options).toHaveLength(4)
+        expect(q.answer).toBeGreaterThanOrEqual(0)
+        expect(q.answer).toBeLessThan(4)
+        expect(q.explain.length).toBeGreaterThan(3)
+      }
+    }
+  })
+  it('章节划分正确（4+8+8）', () => {
+    expect(lessons.filter(l => l.chapter === 1)).toHaveLength(4)
+    expect(lessons.filter(l => l.chapter === 2)).toHaveLength(8)
+    expect(lessons.filter(l => l.chapter === 3)).toHaveLength(8)
+  })
+})
+
+describe('fengshui.json', () => {
+  it('6 场景各 5 条，kind 合法', () => {
+    expect(fengshui).toHaveLength(30)
+    const scenes = ['客厅', '卧室', '书桌', '玄关', '厨房', '办公位']
+    for (const s of scenes) {
+      expect(fengshui.filter(f => f.scene === s)).toHaveLength(5)
+    }
+    for (const f of fengshui) {
+      expect(['宜', '忌']).toContain(f.kind)
+      expect(f.detail.length).toBeGreaterThan(15)
+    }
+  })
+})
+
+describe('quiz.json', () => {
+  it('100 题、难度分布达标、答案合法', () => {
+    expect(quiz).toHaveLength(100)
+    expect(quiz.filter(q => q.difficulty === 'easy').length).toBeGreaterThanOrEqual(40)
+    expect(quiz.filter(q => q.difficulty === 'medium').length).toBeGreaterThanOrEqual(35)
+    expect(quiz.filter(q => q.difficulty === 'hard').length).toBeGreaterThanOrEqual(15)
+    for (const q of quiz) {
+      expect(q.options).toHaveLength(4)
+      expect(q.answer).toBeGreaterThanOrEqual(0)
+      expect(q.answer).toBeLessThan(4)
+    }
+    expect(new Set(quiz.map(q => q.id)).size).toBe(100)
+  })
+})
+
+describe('badges.json', () => {
+  it('24 枚 = 6 指标 × 4 档，threshold 递增', () => {
+    expect(badges).toHaveLength(24)
+    const metrics = ['lessons_completed', 'fengshui_read', 'quiz_best_score', 'quiz_best_combo', 'streak_days', 'lingyun']
+    for (const m of metrics) {
+      const group = badges.filter(b => b.metric === m)
+      expect(group).toHaveLength(4)
+      const ts = group.map(b => b.threshold)
+      expect([...ts].sort((a, b) => a - b)).toEqual(ts)
+    }
+    expect(new Set(badges.map(b => b.id)).size).toBe(24)
   })
 })
