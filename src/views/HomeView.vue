@@ -32,6 +32,7 @@ const modules = [
       <p class="guaci">{{ daily.guaci }}</p>
       <p class="plain">{{ daily.plain }}</p>
       <p class="fun">💡 {{ daily.fun }}</p>
+      <RouterLink :to="'/hexagrams/' + daily.id" class="link">查看百科 →</RouterLink>
     </section>
 
     <section class="modules">
@@ -71,6 +72,7 @@ const modules = [
 .guaci { color: var(--ink-2); font-size: 14px; margin: 4px 0; }
 .plain { font-size: 14px; max-width: 560px; margin: 6px auto; }
 .fun { font-size: 13px; color: var(--cinnabar); margin-top: 6px; }
+.link { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--cinnabar); }
 .modules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
 .module { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
 .m-icon { font-size: 26px; }

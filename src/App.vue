@@ -2,6 +2,7 @@
 const navs = [
   { to: '/', label: '首页', icon: '🏠' },
   { to: '/lessons', label: '学堂', icon: '📖' },
+  { to: '/hexagrams', label: '百科', icon: '📜' },
   { to: '/fengshui', label: '风水', icon: '🏮' },
   { to: '/divination', label: '起卦', icon: '🪙' },
   { to: '/quiz', label: '闯关', icon: '⚔️' }

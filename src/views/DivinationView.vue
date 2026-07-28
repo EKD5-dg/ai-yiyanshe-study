@@ -42,13 +42,19 @@ function start() {
 
     <div v-if="result" class="reading">
       <div class="card">
-        <h3>本卦 · {{ result.origin.fullName }} {{ result.origin.symbol }}</h3>
+        <div class="card-head">
+          <h3>本卦 · {{ result.origin.fullName }} {{ result.origin.symbol }}</h3>
+          <RouterLink :to="'/hexagrams/' + result.origin.id" class="link">查看百科 →</RouterLink>
+        </div>
         <p class="guaci">{{ result.origin.guaci }}</p>
         <p>{{ result.origin.plain }}</p>
         <p class="fun">💡 {{ result.origin.fun }}</p>
       </div>
       <div v-if="result.changed" class="card">
-        <h3>变卦 · {{ result.changed.fullName }} {{ result.changed.symbol }}</h3>
+        <div class="card-head">
+          <h3>变卦 · {{ result.changed.fullName }} {{ result.changed.symbol }}</h3>
+          <RouterLink :to="'/hexagrams/' + result.changed.id" class="link">查看百科 →</RouterLink>
+        </div>
         <p class="sub">有 {{ result.changingIdx.length }} 个变爻（红色），事情可能向这个方向发展：</p>
         <p>{{ result.changed.plain }}</p>
       </div>
@@ -68,4 +74,6 @@ function start() {
 .guaci { color: var(--ink-2); font-size: 14px; margin: 4px 0; }
 .fun { color: var(--cinnabar); font-size: 13px; margin-top: 6px; }
 .sub { font-size: 13px; color: var(--muted); }
+.card-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.link { font-size: 13px; color: var(--cinnabar); }
 </style>
