@@ -63,7 +63,7 @@ function nextQuestion() {
       <h1 class="page-title">📖 易经学堂</h1>
       <p class="page-sub">从阴阳到六十四卦，一关一关打通关</p>
       <section v-for="(ch, ci) in chapters" :key="ci" class="chapter">
-        <h3 class="ch-name">第{{ ['一', '二', '三'][ci] }}章 · {{ ch.name }}</h3>
+        <h3 class="ch-name">第{{ ['一', '二', '三', '四', '五', '六'][ci] }}章 · {{ ch.name }}</h3>
         <div class="levels">
           <button v-for="l in ch.items" :key="l.id" class="level card"
             :class="{ locked: !isUnlocked(l.index), done: isDone(l.id) }"
