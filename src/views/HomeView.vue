@@ -11,6 +11,10 @@ const store = useProgressStore()
 const daily = dailyHexagram()
 const lessonPct = computed(() => Math.round(store.completedLessons.length / lessons.length * 100))
 
+// 今日任务：任意学习行为即算当日打卡（与 store 的 streak 日期格式一致）
+const now = new Date()
+const todayDone = computed(() => store.streak.lastDate === `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`)
+
 const modules = [
   { to: '/lessons', icon: '📖', title: '易经学堂', sub: () => `已学 ${store.completedLessons.length}/${lessons.length} 关` },
   { to: '/fengshui', icon: '🏮', title: '风水小知识', sub: () => `已读 ${store.readFengshui.length} 条` },
@@ -48,6 +52,9 @@ const modules = [
         <span>🏅 徽章 {{ store.badges.length }}/24</span>
         <span>🔥 连续 {{ store.streak.days }} 天</span>
       </div>
+      <p class="daily-task" :class="{ done: todayDone }">
+        {{ todayDone ? '✅ 今日任务已完成：学习打卡成功！' : '🎯 今日任务：完成 1 个关卡或读 1 条风水卡' }}
+      </p>
       <div class="badge-wall">
         <BadgeItem v-for="b in badges" :key="b.id" :badge="b" :unlocked="store.badges.includes(b.id)" />
       </div>
@@ -71,6 +78,8 @@ const modules = [
 .module .progress-track { width: 100%; }
 .stats { margin-top: 14px; }
 .stat-row { display: flex; gap: 18px; font-size: 13px; color: var(--ink-2); margin: 8px 0 12px; flex-wrap: wrap; }
+.daily-task { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.daily-task.done { color: var(--good); }
 .badge-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
 @media (max-width: 720px) {
   .modules { grid-template-columns: 1fr 1fr; }
