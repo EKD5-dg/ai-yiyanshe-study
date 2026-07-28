@@ -5,6 +5,8 @@ import lessons from '../src/data/lessons.json'
 import fengshui from '../src/data/fengshui.json'
 import quiz from '../src/data/quiz.json'
 import badges from '../src/data/badges.json'
+import yaoci from '../src/data/yaoci.json'
+import fengshuiTopics from '../src/data/fengshui-topics.json'
 
 // 文王卦序标准表：kingWen[lowerKey][upperKey] = 卦序号
 const kingWen = {
@@ -61,8 +63,8 @@ describe('hexagrams.json', () => {
 })
 
 describe('lessons.json', () => {
-  it('20 关、每关 3 题、答案下标合法', () => {
-    expect(lessons).toHaveLength(20)
+  it('36 关、每关 3 题、答案下标合法', () => {
+    expect(lessons).toHaveLength(36)
     for (const l of lessons) {
       expect(l.questions).toHaveLength(3)
       expect(l.content.length).toBeGreaterThanOrEqual(2)
@@ -74,10 +76,13 @@ describe('lessons.json', () => {
       }
     }
   })
-  it('章节划分正确（4+8+8）', () => {
+  it('章节划分正确（4+8+8+6+5+5）', () => {
     expect(lessons.filter(l => l.chapter === 1)).toHaveLength(4)
     expect(lessons.filter(l => l.chapter === 2)).toHaveLength(8)
     expect(lessons.filter(l => l.chapter === 3)).toHaveLength(8)
+    expect(lessons.filter(l => l.chapter === 4)).toHaveLength(6)
+    expect(lessons.filter(l => l.chapter === 5)).toHaveLength(5)
+    expect(lessons.filter(l => l.chapter === 6)).toHaveLength(5)
   })
 })
 
@@ -121,5 +126,62 @@ describe('badges.json', () => {
       expect([...ts].sort((a, b) => a - b)).toEqual(ts)
     }
     expect(new Set(badges.map(b => b.id)).size).toBe(24)
+  })
+  it('lessons_completed 档位为 1/10/20/36', () => {
+    const ts = badges.filter(b => b.metric === 'lessons_completed').map(b => b.threshold)
+    expect(ts).toEqual([1, 10, 20, 36])
+  })
+})
+
+describe('yaoci.json', () => {
+  const linesOf = new Map(trigrams.map(t => [t.key, t.lines]))
+  it('64 条且下标 = id-1', () => {
+    expect(yaoci).toHaveLength(64)
+    yaoci.forEach((y, i) => expect(y.id).toBe(i + 1))
+  })
+  it('每条 6 爻，爻名阴阳与卦象一致，text/plain 非空', () => {
+    const posNames = ['初', '二', '三', '四', '五', '上']
+    for (const y of yaoci) {
+      const h = hexagrams[y.id - 1]
+      const bits = [...linesOf.get(h.lower), ...linesOf.get(h.upper)]
+      expect(y.yaoci).toHaveLength(6)
+      expect(y.xiang.text.length).toBeGreaterThan(3)
+      expect(y.xiang.plain.length).toBeGreaterThan(3)
+      y.yaoci.forEach((line, i) => {
+        expect(line.name).toContain(posNames[i])
+        expect(line.name).toContain(bits[i] === 1 ? '九' : '六')
+        expect(line.text.length).toBeGreaterThan(1)
+        expect(line.plain.length).toBeGreaterThan(3)
+      })
+    }
+  })
+  it('仅乾坤两卦有 extra（用九/用六）', () => {
+    expect(yaoci[0].extra.name).toBe('用九')
+    expect(yaoci[1].extra.name).toBe('用六')
+    for (const y of yaoci) {
+      if (y.id !== 1 && y.id !== 2) expect(y.extra).toBeUndefined()
+    }
+  })
+})
+
+describe('fengshui-topics.json', () => {
+  it('3 个专题、每专题 sections ≥ 4 且字段完整', () => {
+    expect(fengshuiTopics).toHaveLength(3)
+    for (const t of fengshuiTopics) {
+      expect(t.title.length).toBeGreaterThan(0)
+      expect(t.icon.length).toBeGreaterThan(0)
+      expect(t.intro.length).toBeGreaterThan(0)
+      expect(t.sections.length).toBeGreaterThanOrEqual(4)
+      for (const s of t.sections) {
+        expect(s.heading.length).toBeGreaterThan(0)
+        expect(s.text.length).toBeGreaterThan(30)
+      }
+    }
+  })
+  it('t1 带 minggua 交互，其余无 interactive', () => {
+    expect(fengshuiTopics[0].id).toBe('t1')
+    expect(fengshuiTopics[0].interactive).toBe('minggua')
+    expect(fengshuiTopics[1].interactive).toBeUndefined()
+    expect(fengshuiTopics[2].interactive).toBeUndefined()
   })
 })

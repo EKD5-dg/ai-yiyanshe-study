@@ -1,8 +1,8 @@
 [
   { "id": "b_lessons_1", "metric": "lessons_completed", "threshold": 1, "name": "初窥门径", "icon": "📖", "desc": "通过第 1 个关卡" },
-  { "id": "b_lessons_2", "metric": "lessons_completed", "threshold": 5, "name": "渐入佳境", "icon": "📖", "desc": "累计通过 5 个关卡" },
-  { "id": "b_lessons_3", "metric": "lessons_completed", "threshold": 12, "name": "登堂入室", "icon": "📖", "desc": "累计通过 12 个关卡" },
-  { "id": "b_lessons_4", "metric": "lessons_completed", "threshold": 20, "name": "易学小成", "icon": "📖", "desc": "通关全部 20 个关卡" },
+  { "id": "b_lessons_2", "metric": "lessons_completed", "threshold": 10, "name": "修行渐深", "icon": "📖", "desc": "累计通过 10 个关卡" },
+  { "id": "b_lessons_3", "metric": "lessons_completed", "threshold": 20, "name": "双十圆满", "icon": "📖", "desc": "累计通过 20 个关卡" },
+  { "id": "b_lessons_4", "metric": "lessons_completed", "threshold": 36, "name": "易学大成", "icon": "📖", "desc": "通关全部 36 个关卡" },
   { "id": "b_fengshui_1", "metric": "fengshui_read", "threshold": 5, "name": "风生水起", "icon": "🏮", "desc": "阅读 5 条风水知识" },
   { "id": "b_fengshui_2", "metric": "fengshui_read", "threshold": 10, "name": "察风观水", "icon": "🏮", "desc": "阅读 10 条风水知识" },
   { "id": "b_fengshui_3", "metric": "fengshui_read", "threshold": 20, "name": "布局有道", "icon": "🏮", "desc": "阅读 20 条风水知识" },

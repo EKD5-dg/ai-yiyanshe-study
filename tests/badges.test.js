@@ -21,7 +21,7 @@ describe('newlyUnlocked', () => {
     expect(got.map(b => b.id)).not.toContain('b_lessons_1')
   })
   it('跨档位一次可解锁多枚', () => {
-    const got = newlyUnlocked(makeState({ completedLessons: ['a', 'b', 'c', 'd', 'e'] }))
+    const got = newlyUnlocked(makeState({ completedLessons: Array.from({ length: 10 }, (_, i) => 'l' + (i + 1)) }))
     expect(got.map(b => b.id)).toEqual(expect.arrayContaining(['b_lessons_1', 'b_lessons_2']))
   })
 })
