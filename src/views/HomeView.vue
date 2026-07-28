@@ -1,6 +1,78 @@
+<script setup>
+import { computed } from 'vue'
+import { useProgressStore } from '../stores/progress'
+import { dailyHexagram } from '../utils/daily'
+import BadgeItem from '../components/BadgeItem.vue'
+import DisclaimerBar from '../components/DisclaimerBar.vue'
+import badges from '../data/badges.json'
+import lessons from '../data/lessons.json'
+
+const store = useProgressStore()
+const daily = dailyHexagram()
+const lessonPct = computed(() => Math.round(store.completedLessons.length / lessons.length * 100))
+
+const modules = [
+  { to: '/lessons', icon: '📖', title: '易经学堂', sub: () => `已学 ${store.completedLessons.length}/${lessons.length} 关` },
+  { to: '/fengshui', icon: '🏮', title: '风水小知识', sub: () => `已读 ${store.readFengshui.length} 条` },
+  { to: '/divination', icon: '🪙', title: '趣味起卦', sub: () => '摇一摇铜钱' },
+  { to: '/quiz', icon: '⚔️', title: '答题闯关', sub: () => `最高连击 ×${store.quizBest.combo}` }
+]
+</script>
+
 <template>
   <div class="page">
-    <h1 class="page-title">首页</h1>
-    <p class="page-sub">建设中…</p>
+    <section class="daily card">
+      <div class="daily-label">每 日 一 卦</div>
+      <div class="daily-symbol">{{ daily.symbol }}</div>
+      <h2>{{ daily.fullName }}</h2>
+      <p class="guaci">{{ daily.guaci }}</p>
+      <p class="plain">{{ daily.plain }}</p>
+      <p class="fun">💡 {{ daily.fun }}</p>
+    </section>
+
+    <section class="modules">
+      <RouterLink v-for="m in modules" :key="m.to" :to="m.to" class="card module">
+        <span class="m-icon">{{ m.icon }}</span>
+        <b>{{ m.title }}</b>
+        <span class="m-sub">{{ m.sub() }}</span>
+        <div v-if="m.to === '/lessons'" class="progress-track">
+          <div class="progress-fill" :style="{ width: lessonPct + '%' }"></div>
+        </div>
+      </RouterLink>
+    </section>
+
+    <section class="card stats">
+      <b>我的成就</b>
+      <div class="stat-row">
+        <span>⭐ 灵蕴值 {{ store.lingyun }}</span>
+        <span>🏅 徽章 {{ store.badges.length }}/24</span>
+        <span>🔥 连续 {{ store.streak.days }} 天</span>
+      </div>
+      <div class="badge-wall">
+        <BadgeItem v-for="b in badges" :key="b.id" :badge="b" :unlocked="store.badges.includes(b.id)" />
+      </div>
+    </section>
+
+    <DisclaimerBar />
   </div>
 </template>
+
+<style scoped>
+.daily { text-align: center; background: linear-gradient(135deg, #fffdf7, #f3ecd9); }
+.daily-label { font-size: 12px; color: var(--cinnabar); letter-spacing: 4px; }
+.daily-symbol { font-size: 46px; line-height: 1.3; }
+.guaci { color: var(--ink-2); font-size: 14px; margin: 4px 0; }
+.plain { font-size: 14px; max-width: 560px; margin: 6px auto; }
+.fun { font-size: 13px; color: var(--cinnabar); margin-top: 6px; }
+.modules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+.module { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.m-icon { font-size: 26px; }
+.m-sub { font-size: 12px; color: var(--muted); }
+.module .progress-track { width: 100%; }
+.stats { margin-top: 14px; }
+.stat-row { display: flex; gap: 18px; font-size: 13px; color: var(--ink-2); margin: 8px 0 12px; flex-wrap: wrap; }
+.badge-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+@media (max-width: 720px) {
+  .modules { grid-template-columns: 1fr 1fr; }
+}
+</style>
