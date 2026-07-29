@@ -4,6 +4,7 @@ import { useProgressStore } from '../stores/progress'
 import { dailyHexagram } from '../utils/daily'
 import BadgeItem from '../components/BadgeItem.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
+import SyncPanel from '../components/SyncPanel.vue'
 import badges from '../data/badges.json'
 import lessons from '../data/lessons.json'
 
@@ -60,6 +61,8 @@ const modules = [
         <BadgeItem v-for="b in badges" :key="b.id" :badge="b" :unlocked="store.badges.includes(b.id)" />
       </div>
     </section>
+
+    <SyncPanel />
 
     <DisclaimerBar />
   </div>

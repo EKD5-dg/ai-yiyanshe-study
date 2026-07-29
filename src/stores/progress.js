@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { newlyUnlocked } from '../utils/badges'
+import { fetchProgress, saveProgress } from '../utils/api'
 
 export const STORAGE_KEY = 'yiyanshe-progress-v1'
 
@@ -15,11 +16,12 @@ export function defaultState() {
     badges: [],
     streak: { days: 0, lastDate: '' },
     quizBest: { score: 0, combo: 0 },
-    lastUnlocked: []
+    lastUnlocked: [],
+    synced: false // 是否已从服务端同步
   }
 }
 
-function load() {
+function loadLocal() {
   const base = defaultState()
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -29,23 +31,65 @@ function load() {
       typeof p.lingyun === 'number' &&
       Array.isArray(p.completedLessons) && Array.isArray(p.badges)
     if (!valid) return base
-    return { ...base, ...p, lastUnlocked: [] }
+    return { ...base, ...p, lastUnlocked: [], synced: false }
   } catch {
     return base
   }
 }
 
 export const useProgressStore = defineStore('progress', {
-  state: () => load(),
+  state: () => loadLocal(),
   getters: {
     // 顺序解锁：可玩关卡数 = 已完成数 + 1
     unlockedCount: (s) => s.completedLessons.length + 1
   },
   actions: {
-    persist() {
+    /** 应用启动时调用：从服务端拉取进度，与本地合并（取并集） */
+    async syncFromServer() {
+      try {
+        const remote = await fetchProgress()
+        if (remote) {
+          this._mergeRemote(remote)
+        }
+        this.synced = true
+        this.persistLocal()
+      } catch {
+        // 网络失败降级为本地数据，不阻塞使用
+        this.synced = true
+      }
+    },
+    /** 合并远端数据：取并集，数值取大 */
+    _mergeRemote(remote) {
+      this.lingyun = Math.max(this.lingyun, remote.lingyun || 0)
+      this.completedLessons = [...new Set([...this.completedLessons, ...(remote.completedLessons || [])])]
+      this.readFengshui = [...new Set([...this.readFengshui, ...(remote.readFengshui || [])])]
+      this.badges = [...new Set([...this.badges, ...(remote.badges || [])])]
+      // streak 取更新的那个
+      if (remote.streak && remote.streak.lastDate > (this.streak.lastDate || '')) {
+        this.streak = remote.streak
+      }
+      // quizBest 取更高
+      if (remote.quizBest) {
+        this.quizBest.score = Math.max(this.quizBest.score, remote.quizBest.score || 0)
+        this.quizBest.combo = Math.max(this.quizBest.combo, remote.quizBest.combo || 0)
+      }
+    },
+    /** 本地持久化（即时） */
+    persistLocal() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.$state))
       } catch { /* 隐私模式等场景降级为内存态 */ }
+    },
+    /** 持久化 = 本地 + 服务端（防抖 1s） */
+    persist() {
+      this.persistLocal()
+      this._debouncedSync()
+    },
+    _debouncedSync() {
+      if (this._syncTimer) clearTimeout(this._syncTimer)
+      this._syncTimer = setTimeout(() => {
+        saveProgress(this.$state).catch(() => { /* 静默失败，下次再同步 */ })
+      }, 1000)
     },
     touchStreak() {
       const today = dateStr(new Date())

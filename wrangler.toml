@@ -1,0 +1,7 @@
+name = "yiyanshe"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-09-01"
+
+[[kv_namespaces]]
+binding = "PROGRESS"
+id = "2bdba5243b5c4ce0b81ca43dcf280535"
