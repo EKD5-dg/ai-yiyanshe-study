@@ -1,9 +1,20 @@
 <script setup>
 import { ref } from 'vue'
 import { useProgressStore } from '../stores/progress'
-import { createSyncCode, redeemSyncCode, setUserId } from '../utils/api'
+import { createSyncCode, redeemSyncCode, setUserId, saveProgress } from '../utils/api'
 
 const store = useProgressStore()
+
+// 服务端英文错误 → 中文提示
+const ERROR_ZH = {
+  'No progress found for this user': '服务器上还没有你的进度，请重试一次',
+  'Code expired or invalid': '同步码已过期或不存在，请在旧设备重新生成',
+  'Invalid code': '同步码格式不对，请检查后重试',
+  'Invalid userId': '设备标识异常，请刷新页面后重试'
+}
+function zh(message, fallback) {
+  return ERROR_ZH[message] || fallback
+}
 
 // ─── 生成同步码 ───
 const generatedCode = ref('')
@@ -16,11 +27,13 @@ async function handleCreate() {
   createError.value = ''
   generatedCode.value = ''
   try {
+    // 先把当前进度上传服务端，确保新设备兑换后能拉到数据
+    await saveProgress(store.$state)
     const res = await createSyncCode()
     generatedCode.value = res.code
     codeExpiry.value = Date.now() + res.expiresIn * 1000
   } catch (e) {
-    createError.value = e.message || '生成失败，请重试'
+    createError.value = zh(e.message, '生成失败，请检查网络后重试')
   } finally {
     creating.value = false
   }
@@ -46,7 +59,7 @@ async function handleRedeem() {
     redeemOk.value = true
     inputCode.value = ''
   } catch (e) {
-    redeemError.value = e.message || '兑换失败，请检查同步码'
+    redeemError.value = zh(e.message, '同步失败，请检查同步码后重试')
   } finally {
     redeeming.value = false
   }
