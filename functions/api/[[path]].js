@@ -34,6 +34,28 @@ export async function onRequest({ request, env }) {
   const pathname = url.pathname
   const method = request.method
 
+  // ─── 访客统计 ───
+  if (pathname === '/api/track' && method === 'POST') {
+    // 按中国时区（UTC+8）划分自然日
+    const day = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10)
+    const key = `stats:day:${day}`
+    const cur = Number(await env.PROGRESS.get(key)) || 0
+    await env.PROGRESS.put(key, String(cur + 1), { expirationTtl: 86400 * 400 })
+    return json({ ok: true })
+  }
+
+  if (pathname === '/api/stats' && method === 'GET') {
+    const list = await env.PROGRESS.list({ prefix: 'stats:day:' })
+    const days = []
+    for (const k of list.keys) {
+      const v = Number(await env.PROGRESS.get(k.name)) || 0
+      days.push({ date: k.name.slice('stats:day:'.length), visitors: v })
+    }
+    days.sort((a, b) => a.date.localeCompare(b.date))
+    const total = days.reduce((s, d) => s + d.visitors, 0)
+    return json({ total, days: days.slice(-30) })
+  }
+
   // ─── 同步码接口 ───
   if (pathname === '/api/sync/create' && method === 'POST') {
     let body

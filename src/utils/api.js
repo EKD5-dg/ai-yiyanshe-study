@@ -70,3 +70,19 @@ export async function redeemSyncCode(code) {
   }
   return res.json() // { ok, sourceUserId }
 }
+
+/** 访客埋点：每设备每天只上报一次 */
+export async function trackVisit() {
+  const KEY = 'yiyanshe-tracked-date'
+  const today = new Date().toISOString().slice(0, 10)
+  if (localStorage.getItem(KEY) === today) return
+  const res = await fetch(`${API_BASE}/track`, { method: 'POST' })
+  if (res.ok) localStorage.setItem(KEY, today)
+}
+
+/** 拉取访客统计（近 30 天） */
+export async function fetchStats() {
+  const res = await fetch(`${API_BASE}/stats`)
+  if (!res.ok) throw new Error(`fetch stats failed: ${res.status}`)
+  return res.json() // { total, days: [{date, visitors}] }
+}

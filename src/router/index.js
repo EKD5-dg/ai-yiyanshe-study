@@ -8,6 +8,8 @@ const routes = [
   { path: '/hexagrams/:id', name: 'hexagram-detail', component: () => import('../views/HexagramDetailView.vue') },
   { path: '/divination', name: 'divination', component: () => import('../views/DivinationView.vue') },
   { path: '/quiz', name: 'quiz', component: () => import('../views/QuizView.vue') },
+  // 隐藏统计页：不在导航中展示
+  { path: '/stats', name: 'stats', component: () => import('../views/StatsView.vue') },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
