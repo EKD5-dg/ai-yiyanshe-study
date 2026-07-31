@@ -6,6 +6,7 @@ import trigrams from '../data/trigrams.json'
 import yaoci from '../data/yaoci.json'
 import { bitsOf, cuogua, zonggua, hugua } from '../utils/relations'
 import HexagramFigure from '../components/HexagramFigure.vue'
+import TrigramIcon from '../components/art/TrigramIcon.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
 
 const route = useRoute()
@@ -48,6 +49,10 @@ const relations = computed(() => {
         <div class="head-symbol">{{ hex.symbol }}</div>
         <h1 class="head-name">{{ hex.fullName }}</h1>
         <p class="head-meta">第 {{ hex.id }} 卦 · 上{{ upperT.name }}（{{ upperT.nature }}）下{{ lowerT.name }}（{{ lowerT.nature }}）</p>
+        <div class="trigram-icons">
+          <span class="ti"><TrigramIcon :trigram="hex.upper" /><i>上卦·{{ upperT.name }}（{{ upperT.nature }}）</i></span>
+          <span class="ti"><TrigramIcon :trigram="hex.lower" /><i>下卦·{{ lowerT.name }}（{{ lowerT.nature }}）</i></span>
+        </div>
       </div>
     </section>
 
@@ -115,6 +120,10 @@ const relations = computed(() => {
 .head-symbol { font-size: 44px; line-height: 1.2; }
 .head-name { font-size: 22px; letter-spacing: 2px; margin: 2px 0; }
 .head-meta { font-size: 13px; color: var(--muted); }
+.trigram-icons { display: flex; gap: 14px; margin-top: 10px; }
+.ti { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.ti svg { width: 52px; height: 52px; }
+.ti i { font-style: normal; font-size: 11px; color: var(--muted); }
 .block { margin-top: 14px; }
 .block h3 { margin-bottom: 6px; }
 .original { color: var(--ink-2); font-size: 14px; margin: 4px 0; }
