@@ -5,6 +5,8 @@ import { dailyHexagram } from '../utils/daily'
 import BadgeItem from '../components/BadgeItem.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
 import SyncPanel from '../components/SyncPanel.vue'
+import InkHero from '../components/art/InkHero.vue'
+import ModuleArt from '../components/art/ModuleArt.vue'
 import badges from '../data/badges.json'
 import lessons from '../data/lessons.json'
 
@@ -17,15 +19,17 @@ const now = new Date()
 const todayDone = computed(() => store.streak.lastDate === `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`)
 
 const modules = [
-  { to: '/lessons', icon: '📖', title: '易经学堂', sub: () => `已学 ${store.completedLessons.length}/${lessons.length} 关` },
-  { to: '/fengshui', icon: '🏮', title: '风水小知识', sub: () => `已读 ${store.readFengshui.length} 条` },
-  { to: '/divination', icon: '🪙', title: '趣味起卦', sub: () => '摇一摇铜钱' },
-  { to: '/quiz', icon: '⚔️', title: '答题闯关', sub: () => `最高连击 ×${store.quizBest.combo}` }
+  { to: '/lessons', art: 'lessons', title: '易经学堂', sub: () => `已学 ${store.completedLessons.length}/${lessons.length} 关` },
+  { to: '/fengshui', art: 'fengshui', title: '风水小知识', sub: () => `已读 ${store.readFengshui.length} 条` },
+  { to: '/divination', art: 'divination', title: '趣味起卦', sub: () => '摇一摇铜钱' },
+  { to: '/quiz', art: 'quiz', title: '答题闯关', sub: () => `最高连击 ×${store.quizBest.combo}` }
 ]
 </script>
 
 <template>
   <div class="page">
+    <InkHero class="hero" />
+
     <section class="daily card">
       <div class="daily-label">每 日 一 卦</div>
       <div class="daily-symbol">{{ daily.symbol }}</div>
@@ -38,7 +42,7 @@ const modules = [
 
     <section class="modules">
       <RouterLink v-for="m in modules" :key="m.to" :to="m.to" class="card module">
-        <span class="m-icon">{{ m.icon }}</span>
+        <ModuleArt :kind="m.art" class="m-art" />
         <b>{{ m.title }}</b>
         <span class="m-sub">{{ m.sub() }}</span>
         <div v-if="m.to === '/lessons'" class="progress-track">
@@ -69,6 +73,7 @@ const modules = [
 </template>
 
 <style scoped>
+.hero { width: 100%; display: block; border-radius: 14px; margin-bottom: 14px; border: 1px solid var(--line); }
 .daily { text-align: center; background: linear-gradient(135deg, #fffdf7, #f3ecd9); }
 .daily-label { font-size: 12px; color: var(--cinnabar); letter-spacing: 4px; }
 .daily-symbol { font-size: 46px; line-height: 1.3; }
@@ -78,7 +83,7 @@ const modules = [
 .link { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--cinnabar); }
 .modules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
 .module { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
-.m-icon { font-size: 26px; }
+.m-art { width: 44px; height: 44px; }
 .m-sub { font-size: 12px; color: var(--muted); }
 .module .progress-track { width: 100%; }
 .stats { margin-top: 14px; }
