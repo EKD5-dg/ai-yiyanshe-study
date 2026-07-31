@@ -2,6 +2,8 @@
 import { ref, onUnmounted } from 'vue'
 import { useProgressStore } from '../stores/progress'
 import { comboScore } from '../utils/scoring'
+import QuizBanner from '../components/art/QuizBanner.vue'
+import ScrollFrame from '../components/art/ScrollFrame.vue'
 import quizBank from '../data/quiz.json'
 
 const store = useProgressStore()
@@ -75,7 +77,7 @@ onUnmounted(() => clearInterval(timer))
   <div class="page">
     <!-- 开始 -->
     <div v-if="phase === 'start'" class="card center">
-      <div style="font-size:40px">⚔️</div>
+      <QuizBanner class="banner" />
       <h1 class="page-title">答题闯关</h1>
       <p class="page-sub">10 道题 · 每题 15 秒 · 3 条命 · 连击加分</p>
       <p class="best">最佳成绩：{{ store.quizBest.score }} 分 / 连击 ×{{ store.quizBest.combo }}</p>
@@ -103,18 +105,24 @@ onUnmounted(() => clearInterval(timer))
 
     <!-- 结算 -->
     <div v-else class="card center">
-      <div style="font-size:40px">{{ rightCount >= 8 ? '🏆' : rightCount >= 5 ? '🎉' : '💪' }}</div>
-      <h2>得分 {{ score }}</h2>
-      <p>答对 {{ rightCount }}/{{ qIdx + 1 }} · 最高连击 ×{{ maxCombo }} · 灵蕴值 +{{ Math.round(score / 2) }}</p>
-      <p v-if="store.lastUnlocked.length" class="unlock">🏅 新徽章：{{ store.lastUnlocked.map(b => b.name).join('、') }}</p>
-      <button class="btn" @click="start">再来一局</button>
-      <RouterLink to="/" class="btn btn-ghost" style="margin-left:10px">回首页</RouterLink>
+      <ScrollFrame>
+        <div style="font-size:40px">{{ rightCount >= 8 ? '🏆' : rightCount >= 5 ? '🎉' : '💪' }}</div>
+        <h2>得分 {{ score }}</h2>
+        <p>答对 {{ rightCount }}/{{ qIdx + 1 }} · 最高连击 ×{{ maxCombo }} · 灵蕴值 +{{ Math.round(score / 2) }}</p>
+        <p v-if="store.lastUnlocked.length" class="unlock">🏅 新徽章：{{ store.lastUnlocked.map(b => b.name).join('、') }}</p>
+      </ScrollFrame>
+      <div class="over-actions">
+        <button class="btn" @click="start">再来一局</button>
+        <RouterLink to="/" class="btn btn-ghost" style="margin-left:10px">回首页</RouterLink>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .center { text-align: center; padding: 34px; }
+.banner { width: 170px; margin: 0 auto; display: block; }
+.over-actions { margin-top: 16px; }
 .best { font-size: 13px; color: var(--muted); margin: 8px 0 14px; }
 .hud { display: flex; gap: 16px; font-size: 15px; margin-bottom: 8px; }
 .timer.danger { color: var(--cinnabar); font-weight: bold; }

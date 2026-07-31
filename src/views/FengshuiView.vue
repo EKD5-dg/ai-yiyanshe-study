@@ -5,6 +5,7 @@ import FlipCard from '../components/FlipCard.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
 import MingguaCalc from '../components/MingguaCalc.vue'
 import SceneArt from '../components/art/SceneArt.vue'
+import CloudDivider from '../components/art/CloudDivider.vue'
 import fengshui from '../data/fengshui.json'
 import topics from '../data/fengshui-topics.json'
 
@@ -40,6 +41,7 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
         </FlipCard>
       </div>
 
+      <CloudDivider style="margin-top: 20px" />
       <h2 class="section-title">📚 进阶专题</h2>
       <div class="topics">
         <button v-for="t in topics" :key="t.id" class="card topic-card" @click="topic = t">

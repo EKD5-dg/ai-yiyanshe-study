@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { fetchStats } from '../utils/api'
+import InkBrushArt from '../components/art/InkBrushArt.vue'
 
 const loading = ref(true)
 const error = ref('')
@@ -28,6 +29,7 @@ onMounted(async () => {
   <div class="page">
     <h1 class="page-title">📊 访客统计</h1>
     <p class="page-sub">每台设备每天计 1 次 · 按北京时间划分自然日 · 近 30 天</p>
+    <InkBrushArt class="brush" />
 
     <p v-if="loading" class="tip-text">加载中…</p>
     <p v-else-if="error" class="tip-text">{{ error }}</p>
@@ -59,6 +61,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.brush { width: 110px; display: block; margin: 0 auto 12px; }
 .summary { display: flex; gap: 12px; margin-bottom: 14px; }
 .stat { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; }
 .num { font-size: 32px; font-weight: bold; color: var(--cinnabar); }

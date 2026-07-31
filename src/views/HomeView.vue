@@ -7,6 +7,7 @@ import DisclaimerBar from '../components/DisclaimerBar.vue'
 import SyncPanel from '../components/SyncPanel.vue'
 import InkHero from '../components/art/InkHero.vue'
 import ModuleArt from '../components/art/ModuleArt.vue'
+import CloudDivider from '../components/art/CloudDivider.vue'
 import badges from '../data/badges.json'
 import lessons from '../data/lessons.json'
 
@@ -52,6 +53,7 @@ const modules = [
     </section>
 
     <section class="card stats">
+      <CloudDivider />
       <b>我的成就</b>
       <div class="stat-row">
         <span>⭐ 灵蕴值 {{ store.lingyun }}</span>
