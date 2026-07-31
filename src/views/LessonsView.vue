@@ -12,6 +12,11 @@ const picked = ref(null)       // 本题已选下标
 const firstTryAll = ref(true)  // 是否全部首选即对
 const answeredRight = ref(false)
 
+// 过滤掉未注册图名的 figure 块，避免渲染出空白 block
+const visibleContent = computed(() =>
+  current.value ? current.value.content.filter(b => b.type !== 'figure' || figureMap[b.value]) : []
+)
+
 const chapters = computed(() => {
   const map = new Map()
   lessons.forEach((l, i) => {
@@ -80,9 +85,9 @@ function nextQuestion() {
     <template v-else-if="phase === 'read'">
       <button class="btn btn-ghost" @click="current = null">← 返回地图</button>
       <h1 class="page-title">{{ current.title }}</h1>
-      <div v-for="(b, i) in current.content" :key="i" class="block" :class="b.type">
-        <component v-if="b.type === 'figure' && figureMap[b.value]" :is="figureMap[b.value]" class="figure-img" />
-        <p v-else-if="b.type !== 'figure'">{{ b.type === 'tip' ? '💡 ' + b.value : b.value }}</p>
+      <div v-for="(b, i) in visibleContent" :key="i" class="block" :class="b.type">
+        <component v-if="b.type === 'figure'" :is="figureMap[b.value]" class="figure-img" />
+        <p v-else>{{ b.type === 'tip' ? '💡 ' + b.value : b.value }}</p>
       </div>
       <button class="btn" @click="phase = 'quiz'">开始小测 ▶</button>
     </template>
