@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useProgressStore } from '../stores/progress'
+import { figureMap } from '../components/art/figureMap.js'
 import lessons from '../data/lessons.json'
 
 const store = useProgressStore()
@@ -80,7 +81,8 @@ function nextQuestion() {
       <button class="btn btn-ghost" @click="current = null">← 返回地图</button>
       <h1 class="page-title">{{ current.title }}</h1>
       <div v-for="(b, i) in current.content" :key="i" class="block" :class="b.type">
-        <p>{{ b.type === 'tip' ? '💡 ' + b.value : b.value }}</p>
+        <component v-if="b.type === 'figure' && figureMap[b.value]" :is="figureMap[b.value]" class="figure-img" />
+        <p v-else-if="b.type !== 'figure'">{{ b.type === 'tip' ? '💡 ' + b.value : b.value }}</p>
       </div>
       <button class="btn" @click="phase = 'quiz'">开始小测 ▶</button>
     </template>
@@ -120,6 +122,8 @@ function nextQuestion() {
 .level.locked { opacity: .45; cursor: not-allowed; }
 .level.done { border-color: var(--good); }
 .block { margin: 12px 0; }
+.block.figure { display: flex; justify-content: center; padding: 6px 0; }
+.figure-img { max-width: 320px; width: 100%; }
 .block.tip { background: var(--paper-2); border-radius: 10px; padding: 10px 14px; font-size: 14px; }
 .question { margin: 8px 0 14px; }
 .options { display: grid; gap: 10px; margin-bottom: 12px; }

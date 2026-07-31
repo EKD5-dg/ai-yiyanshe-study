@@ -84,6 +84,14 @@ describe('lessons.json', () => {
     expect(lessons.filter(l => l.chapter === 5)).toHaveLength(5)
     expect(lessons.filter(l => l.chapter === 6)).toHaveLength(5)
   })
+  it('figure 块的 value 均已在 figureMap 注册', async () => {
+    const { figureMap } = await import('../src/components/art/figureMap.js')
+    const figures = lessons.flatMap(l => l.content.filter(b => b.type === 'figure'))
+    expect(figures.length).toBeGreaterThanOrEqual(8)
+    for (const f of figures) {
+      expect(Object.keys(figureMap), `未注册的图名: ${f.value}`).toContain(f.value)
+    }
+  })
 })
 
 describe('fengshui.json', () => {
