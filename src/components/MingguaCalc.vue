@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { minggua } from '../utils/minggua'
+import JiugongGrid from './art/JiugongGrid.vue'
 
 const years = Array.from({ length: 2025 - 1920 + 1 }, (_, i) => 1920 + i)
 const year = ref(2000)
@@ -45,6 +46,7 @@ function calc() {
           </tbody>
         </table>
       </div>
+      <JiugongGrid :lucky="result.lucky" :unlucky="result.unlucky" class="jiugong" />
     </div>
 
     <p class="note">按公历年份简化计算，未处理立春分界，仅供娱乐参考</p>
@@ -62,6 +64,7 @@ function calc() {
 .radios { display: inline-flex; align-items: center; gap: 10px; }
 .radio { cursor: pointer; }
 .result { margin-top: 16px; text-align: center; }
+.jiugong { width: 240px; max-width: 100%; margin: 14px auto 0; display: block; }
 .gua-name { font-size: 42px; color: var(--cinnabar); line-height: 1.2; }
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; text-align: left; }
 .cols table { width: 100%; border-collapse: collapse; font-size: 13px; }

@@ -4,6 +4,7 @@ import { useProgressStore } from '../stores/progress'
 import FlipCard from '../components/FlipCard.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
 import MingguaCalc from '../components/MingguaCalc.vue'
+import SceneArt from '../components/art/SceneArt.vue'
 import fengshui from '../data/fengshui.json'
 import topics from '../data/fengshui-topics.json'
 
@@ -24,6 +25,8 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
       <div class="tabs">
         <button v-for="s in scenes" :key="s" class="tab" :class="{ on: active === s }" @click="active = s">{{ s }}</button>
       </div>
+
+      <SceneArt :scene="active" class="scene-art" />
 
       <div class="grid">
         <FlipCard v-for="c in cards" :key="c.id" @open="store.readCard(c.id)">
@@ -70,6 +73,7 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
   border-radius: 18px; cursor: pointer; font-size: 13px; color: var(--ink-2);
 }
 .tab.on { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
+.scene-art { width: 100%; max-width: 440px; display: block; margin: 0 auto 12px; }
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .summary { font-size: 15px; margin-top: 8px; }
 .read { position: absolute; top: 10px; right: 12px; font-size: 11px; color: var(--good); }
