@@ -2,6 +2,8 @@
 import { ref, computed } from 'vue'
 import { castLine, interpret } from '../utils/divination'
 import HexagramFigure from '../components/HexagramFigure.vue'
+import CoinFace from '../components/art/CoinFace.vue'
+import CloudPattern from '../components/art/CloudPattern.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
 
 const lines = ref([])        // 已掷出的爻（自下而上）
@@ -32,10 +34,15 @@ function start() {
     <p class="page-sub">三枚铜钱摇六次，看看今天掷出什么卦</p>
 
     <div class="stage card">
+      <CloudPattern class="stage-cloud" />
       <HexagramFigure v-if="lines.length" :bits="bits" :changing="changing" />
       <p v-else class="placeholder-text">卦象将在这里自下而上生长</p>
       <div class="coins" v-if="lines.length">
-        <span v-for="(l, i) in lines" :key="i" class="coin-row">第{{ i + 1 }}爻 {{ l.coins.join(' ') }} → {{ l.value }}</span>
+        <span v-for="(l, i) in lines" :key="i" class="coin-row">
+          <i class="coin-label">第{{ i + 1 }}爻</i>
+          <CoinFace v-for="(c, j) in l.coins" :key="j" :side="c" class="coin-svg" />
+          <i class="coin-val">→ {{ l.value }}</i>
+        </span>
       </div>
       <button class="btn" :disabled="casting" @click="start">{{ casting ? '摇卦中…' : lines.length ? '再摇一次' : '摇铜钱 🪙' }}</button>
     </div>
@@ -66,9 +73,14 @@ function start() {
 </template>
 
 <style scoped>
-.stage { text-align: center; padding: 26px; }
+.stage { position: relative; overflow: hidden; text-align: center; padding: 26px; }
+.stage-cloud { position: absolute; top: 6px; left: 0; width: 100%; pointer-events: none; }
+.stage > *:not(.stage-cloud) { position: relative; }
 .placeholder-text { color: var(--muted); font-size: 13px; }
-.coins { display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: var(--muted); margin: 12px 0; }
+.coins { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); margin: 12px 0; }
+.coin-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.coin-label, .coin-val { font-style: normal; }
+.coin-svg { width: 22px; height: 22px; flex: none; }
 .stage .btn { margin-top: 10px; }
 .reading { display: grid; gap: 12px; margin-top: 14px; }
 .guaci { color: var(--ink-2); font-size: 14px; margin: 4px 0; }
