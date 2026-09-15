@@ -6,8 +6,11 @@ import DisclaimerBar from '../components/DisclaimerBar.vue'
 import MingguaCalc from '../components/MingguaCalc.vue'
 import SceneArt from '../components/art/SceneArt.vue'
 import CloudDivider from '../components/art/CloudDivider.vue'
+import TopicIcon from '../components/art/TopicIcon.vue'
 import fengshui from '../data/fengshui.json'
 import topics from '../data/fengshui-topics.json'
+
+const topicIconKind = { t1: 'minggua', t2: 'feixing', t3: 'luopan' }
 
 const store = useProgressStore()
 const scenes = ['客厅', '卧室', '书桌', '玄关', '厨房', '办公位']
@@ -45,7 +48,7 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
       <h2 class="section-title">📚 进阶专题</h2>
       <div class="topics">
         <button v-for="t in topics" :key="t.id" class="card topic-card" @click="topic = t">
-          <span class="topic-icon">{{ t.icon }}</span>
+          <TopicIcon :kind="topicIconKind[t.id]" class="topic-art" />
           <span class="topic-title">{{ t.title }}</span>
           <span class="topic-intro">{{ t.intro }}</span>
         </button>
@@ -83,7 +86,7 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
 .section-title { font-size: 17px; margin: 24px 0 12px; }
 .topics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .topic-card { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; cursor: pointer; text-align: left; font-family: inherit; }
-.topic-icon { font-size: 26px; }
+.topic-art { width: 44px; height: 44px; margin-bottom: 2px; }
 .topic-title { font-size: 15px; font-weight: bold; }
 .topic-intro { font-size: 12px; color: var(--muted); }
 .topic-head { margin-top: 14px; }

@@ -18,6 +18,7 @@ const rightCount = ref(0)
 const timeLeft = ref(15)
 const picked = ref(null)     // 本题选择（锁定后显示对错）
 let timer = null
+let settleTimer = null
 
 function shuffle(arr) {
   const a = [...arr]
@@ -59,7 +60,8 @@ function settle(i) {
     combo.value = 0
     lives.value--
   }
-  setTimeout(() => {
+  clearTimeout(settleTimer)
+  settleTimer = setTimeout(() => {
     if (lives.value <= 0 || qIdx.value >= 9) {
       phase.value = 'over'
       store.finishQuiz(score.value, maxCombo.value)
@@ -70,7 +72,10 @@ function settle(i) {
   }, 900)
 }
 
-onUnmounted(() => clearInterval(timer))
+onUnmounted(() => {
+  clearInterval(timer)
+  clearTimeout(settleTimer)
+})
 </script>
 
 <template>

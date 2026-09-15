@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import hexagrams from '../data/hexagrams.json'
 import trigrams from '../data/trigrams.json'
+import HexListBanner from '../components/art/HexListBanner.vue'
 
 const keyword = ref('')
 const upperKey = ref(null)   // 选中的上卦 key（null = 不筛选）
@@ -29,6 +30,7 @@ const filtered = computed(() => {
   <div class="page">
     <h1 class="page-title">📜 64 卦百科</h1>
     <p class="page-sub">按卦名搜索或按上下卦筛选，点击任意卦查看详解</p>
+    <HexListBanner class="list-banner" />
 
     <div class="filters card">
       <input v-model="keyword" class="search" type="text" placeholder="搜索卦名，如「乾」「水火既济」" />
@@ -59,6 +61,7 @@ const filtered = computed(() => {
 </template>
 
 <style scoped>
+.list-banner { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 14px; }
 .filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .search {
   width: 100%; padding: 8px 14px; font-size: 14px;

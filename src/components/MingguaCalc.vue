@@ -3,7 +3,8 @@ import { ref } from 'vue'
 import { minggua } from '../utils/minggua'
 import JiugongGrid from './art/JiugongGrid.vue'
 
-const years = Array.from({ length: 2025 - 1920 + 1 }, (_, i) => 1920 + i)
+const maxYear = new Date().getFullYear()
+const years = Array.from({ length: maxYear - 1920 + 1 }, (_, i) => 1920 + i)
 const year = ref(2000)
 const gender = ref('male')
 const result = ref(null)

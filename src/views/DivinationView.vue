@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { castLine, interpret } from '../utils/divination'
 import HexagramFigure from '../components/HexagramFigure.vue'
 import CoinFace from '../components/art/CoinFace.vue'
@@ -13,19 +13,23 @@ const result = ref(null)
 const bits = computed(() => lines.value.map(l => (l.yang ? 1 : 0)))
 const changing = computed(() => lines.value.map((l, i) => (l.changing ? i : -1)).filter(i => i >= 0))
 
+let timer = null
 function start() {
   lines.value = []
   result.value = null
   casting.value = true
-  const timer = setInterval(() => {
+  clearInterval(timer)
+  timer = setInterval(() => {
     lines.value.push(castLine())
     if (lines.value.length === 6) {
       clearInterval(timer)
+      timer = null
       casting.value = false
       result.value = interpret(lines.value)
     }
   }, 500)
 }
+onUnmounted(() => clearInterval(timer))
 </script>
 
 <template>

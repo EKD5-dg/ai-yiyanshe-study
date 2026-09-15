@@ -1,6 +1,8 @@
 node_modules/
 dist/
 .superpowers/
+.wrangler/
+.gh-relay/
 *.local
 .DS_Store
 review_diff_*.txt

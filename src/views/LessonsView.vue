@@ -2,6 +2,8 @@
 import { ref, computed } from 'vue'
 import { useProgressStore } from '../stores/progress'
 import { figureMap } from '../components/art/figureMap.js'
+import ChapterBanner from '../components/art/ChapterBanner.vue'
+import SealStamp from '../components/art/SealStamp.vue'
 import lessons from '../data/lessons.json'
 
 const store = useProgressStore()
@@ -69,6 +71,7 @@ function nextQuestion() {
       <h1 class="page-title">📖 易经学堂</h1>
       <p class="page-sub">从阴阳到六十四卦，一关一关打通关</p>
       <section v-for="(ch, ci) in chapters" :key="ci" class="chapter">
+        <ChapterBanner :chapter="ci + 1" class="ch-banner" />
         <h3 class="ch-name">第{{ ['一', '二', '三', '四', '五', '六'][ci] }}章 · {{ ch.name }}</h3>
         <div class="levels">
           <button v-for="l in ch.items" :key="l.id" class="level card"
@@ -86,7 +89,7 @@ function nextQuestion() {
       <button class="btn btn-ghost" @click="current = null">← 返回地图</button>
       <h1 class="page-title">{{ current.title }}</h1>
       <div v-for="(b, i) in visibleContent" :key="i" class="block" :class="b.type">
-        <component v-if="b.type === 'figure'" :is="figureMap[b.value]" class="figure-img" />
+        <component v-if="b.type === 'figure'" :is="figureMap[b.value]" v-bind="b.props || {}" class="figure-img" />
         <p v-else>{{ b.type === 'tip' ? '💡 ' + b.value : b.value }}</p>
       </div>
       <button class="btn" @click="phase = 'quiz'">开始小测 ▶</button>
@@ -109,7 +112,7 @@ function nextQuestion() {
     <!-- 结算 -->
     <template v-else>
       <div class="card result">
-        <div style="font-size:40px">🎉</div>
+        <SealStamp text="通" :size="52" class="result-seal" />
         <h2>通关！{{ current.title }}</h2>
         <p>获得灵蕴值 +{{ firstTryAll ? 30 : 15 }}</p>
         <p v-if="store.lastUnlocked.length" class="unlock">🏅 解锁徽章：{{ store.lastUnlocked.map(b => b.name).join('、') }}</p>
@@ -121,6 +124,7 @@ function nextQuestion() {
 
 <style scoped>
 .chapter { margin-bottom: 20px; }
+.ch-banner { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
 .ch-name { margin-bottom: 10px; color: var(--ink-2); font-size: 15px; }
 .levels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .level { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; text-align: left; }
@@ -138,6 +142,7 @@ function nextQuestion() {
 .explain { font-size: 13px; color: var(--good); margin-bottom: 12px; }
 .wrong-tip { color: var(--cinnabar); }
 .result { text-align: center; padding: 30px; }
+.result-seal { display: block; margin: 0 auto 8px; }
 .unlock { color: var(--cinnabar); font-size: 14px; }
 @media (max-width: 720px) { .levels { grid-template-columns: 1fr 1fr; } }
 </style>

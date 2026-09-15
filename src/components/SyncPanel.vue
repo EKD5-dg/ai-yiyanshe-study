@@ -111,25 +111,25 @@ async function handleRedeem() {
 
 <style scoped>
 .sync-panel { margin-top: 14px; }
-.sync-details { border: 1px solid var(--border, #e5e0d5); border-radius: 10px; overflow: hidden; }
+.sync-details { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
 .sync-summary {
   padding: 10px 14px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  background: var(--card-bg, #fffdf7);
+  background: var(--paper);
   user-select: none;
 }
 .sync-body { padding: 12px 14px; }
 .sync-section { display: flex; flex-direction: column; gap: 8px; }
-.sync-hint { font-size: 12px; color: var(--muted, #999); margin: 0; }
-.sync-divider { border: none; border-top: 1px dashed var(--border, #e5e0d5); margin: 12px 0; }
+.sync-hint { font-size: 12px; color: var(--muted); margin: 0; }
+.sync-divider { border: none; border-top: 1px dashed var(--line); margin: 12px 0; }
 .btn {
   align-self: flex-start;
   padding: 6px 16px;
   border: none;
   border-radius: 6px;
-  background: var(--cinnabar, #c04851);
+  background: var(--cinnabar);
   color: #fff;
   font-size: 13px;
   cursor: pointer;
@@ -141,22 +141,22 @@ async function handleRedeem() {
   font-size: 28px;
   font-weight: 700;
   letter-spacing: 6px;
-  color: var(--ink, #2c2c2c);
+  color: var(--ink);
   font-family: 'Courier New', monospace;
 }
-.code-expire { font-size: 11px; color: var(--muted, #999); }
+.code-expire { font-size: 11px; color: var(--muted); }
 .redeem-row { display: flex; gap: 8px; }
 .code-input {
   flex: 1;
   max-width: 160px;
   padding: 6px 10px;
-  border: 1px solid var(--border, #e5e0d5);
+  border: 1px solid var(--line);
   border-radius: 6px;
   font-size: 15px;
   letter-spacing: 3px;
   text-transform: uppercase;
   font-family: 'Courier New', monospace;
 }
-.error { font-size: 12px; color: #d32f2f; margin: 0; }
-.success { font-size: 12px; color: var(--good, #2e7d32); margin: 0; }
+.error { font-size: 12px; color: var(--cinnabar); margin: 0; }
+.success { font-size: 12px; color: var(--good); margin: 0; }
 </style>

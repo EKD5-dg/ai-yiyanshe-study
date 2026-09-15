@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useProgressStore } from '../stores/progress'
+import { useProgressStore, todayStr } from '../stores/progress'
 import { dailyHexagram } from '../utils/daily'
 import BadgeItem from '../components/BadgeItem.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
@@ -8,6 +8,7 @@ import SyncPanel from '../components/SyncPanel.vue'
 import InkHero from '../components/art/InkHero.vue'
 import ModuleArt from '../components/art/ModuleArt.vue'
 import CloudDivider from '../components/art/CloudDivider.vue'
+import SealStamp from '../components/art/SealStamp.vue'
 import badges from '../data/badges.json'
 import lessons from '../data/lessons.json'
 
@@ -16,8 +17,7 @@ const daily = dailyHexagram()
 const lessonPct = computed(() => Math.round(store.completedLessons.length / lessons.length * 100))
 
 // 今日任务：任意学习行为即算当日打卡（与 store 的 streak 日期格式一致）
-const now = new Date()
-const todayDone = computed(() => store.streak.lastDate === `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`)
+const todayDone = computed(() => store.streak.lastDate === todayStr())
 
 const modules = [
   { to: '/lessons', art: 'lessons', title: '易经学堂', sub: () => `已学 ${store.completedLessons.length}/${lessons.length} 关` },
@@ -32,7 +32,10 @@ const modules = [
     <InkHero class="hero" />
 
     <section class="daily card">
-      <div class="daily-label">每 日 一 卦</div>
+      <div class="daily-head">
+        <div class="daily-label">每 日 一 卦</div>
+        <SealStamp text="卦" :size="40" />
+      </div>
       <div class="daily-symbol">{{ daily.symbol }}</div>
       <h2>{{ daily.fullName }}</h2>
       <p class="guaci">{{ daily.guaci }}</p>
@@ -57,7 +60,7 @@ const modules = [
       <b>我的成就</b>
       <div class="stat-row">
         <span>⭐ 灵蕴值 {{ store.lingyun }}</span>
-        <span>🏅 徽章 {{ store.badges.length }}/24</span>
+        <span>🏅 徽章 {{ store.badges.length }}/{{ badges.length }}</span>
         <span>🔥 连续 {{ store.streak.days }} 天</span>
       </div>
       <p class="daily-task" :class="{ done: todayDone }">
@@ -76,7 +79,8 @@ const modules = [
 
 <style scoped>
 .hero { width: 100%; display: block; border-radius: 14px; margin-bottom: 14px; border: 1px solid var(--line); }
-.daily { text-align: center; background: linear-gradient(135deg, #fffdf7, #f3ecd9); }
+.daily { text-align: center; background: linear-gradient(135deg, #fffdf7, #f3ecd9); position: relative; }
+.daily-head { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .daily-label { font-size: 12px; color: var(--cinnabar); letter-spacing: 4px; }
 .daily-symbol { font-size: 46px; line-height: 1.3; }
 .guaci { color: var(--ink-2); font-size: 14px; margin: 4px 0; }
