@@ -4,6 +4,7 @@ import { useProgressStore } from '../stores/progress'
 import { figureMap } from '../components/art/figureMap.js'
 import ChapterBanner from '../components/art/ChapterBanner.vue'
 import SealStamp from '../components/art/SealStamp.vue'
+import LazyImage from '../components/LazyImage.vue'
 import lessons from '../data/lessons.json'
 
 const store = useProgressStore()
@@ -70,6 +71,7 @@ function nextQuestion() {
     <template v-if="!current">
       <h1 class="page-title">📖 易经学堂</h1>
       <p class="page-sub">从阴阳到六十四卦，一关一关打通关</p>
+      <LazyImage class="lesson-art" src="/images/lessons-study.webp" alt="书卷求学插画" />
       <section v-for="(ch, ci) in chapters" :key="ci" class="chapter">
         <ChapterBanner :chapter="ci + 1" class="ch-banner" />
         <h3 class="ch-name">第{{ ['一', '二', '三', '四', '五', '六'][ci] }}章 · {{ ch.name }}</h3>
@@ -124,6 +126,13 @@ function nextQuestion() {
 
 <style scoped>
 .chapter { margin-bottom: 20px; }
+.lesson-art {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
 .ch-banner { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
 .ch-name { margin-bottom: 10px; color: var(--ink-2); font-size: 15px; }
 .levels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -133,6 +142,8 @@ function nextQuestion() {
 .block { margin: 12px 0; }
 .block.figure { display: flex; justify-content: center; padding: 6px 0; }
 .figure-img { max-width: 320px; width: 100%; }
+.block.figure :deep(.photo-figure) { width: 100%; max-width: 520px; }
+.block.figure :deep(.photo-figure .lazy-img) { border-radius: 0; }
 .block.tip { background: var(--paper-2); border-radius: 10px; padding: 10px 14px; font-size: 14px; }
 .question { margin: 8px 0 14px; }
 .options { display: grid; gap: 10px; margin-bottom: 12px; }

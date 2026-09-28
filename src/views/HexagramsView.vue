@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import hexagrams from '../data/hexagrams.json'
 import trigrams from '../data/trigrams.json'
 import HexListBanner from '../components/art/HexListBanner.vue'
+import LazyImage from '../components/LazyImage.vue'
 
 const keyword = ref('')
 const upperKey = ref(null)   // 选中的上卦 key（null = 不筛选）
@@ -30,6 +31,7 @@ const filtered = computed(() => {
   <div class="page">
     <h1 class="page-title">📜 64 卦百科</h1>
     <p class="page-sub">按卦名搜索或按上下卦筛选，点击任意卦查看详解</p>
+    <LazyImage class="page-art" src="/images/hexagram-scroll.webp" alt="卦象天书插画" />
     <HexListBanner class="list-banner" />
 
     <div class="filters card">

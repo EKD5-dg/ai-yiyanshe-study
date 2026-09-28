@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { fetchStats } from '../utils/api'
 import InkBrushArt from '../components/art/InkBrushArt.vue'
+import LazyImage from '../components/LazyImage.vue'
 
 const loading = ref(true)
 const error = ref('')
@@ -30,6 +31,7 @@ onMounted(async () => {
     <h1 class="page-title">📊 访客统计</h1>
     <p class="page-sub">每台设备每天计 1 次 · 按北京时间划分自然日 · 近 30 天</p>
     <InkBrushArt class="brush" />
+    <LazyImage class="page-art" src="/images/achievement-seal.webp" alt="金石成就插画" />
 
     <p v-if="loading" class="tip-text">加载中…</p>
     <p v-else-if="error" class="tip-text">{{ error }}</p>

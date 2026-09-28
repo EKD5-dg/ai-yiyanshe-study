@@ -7,10 +7,17 @@ import MingguaCalc from '../components/MingguaCalc.vue'
 import SceneArt from '../components/art/SceneArt.vue'
 import CloudDivider from '../components/art/CloudDivider.vue'
 import TopicIcon from '../components/art/TopicIcon.vue'
+import LazyImage from '../components/LazyImage.vue'
 import fengshui from '../data/fengshui.json'
 import topics from '../data/fengshui-topics.json'
 
 const topicIconKind = { t1: 'minggua', t2: 'feixing', t3: 'luopan' }
+// 专题题图：命卦/飞星用居室图，罗盘用罗盘图
+const topicArt = {
+  t1: { src: '/images/fengshui-room.webp', alt: '雅室风水插画' },
+  t2: { src: '/images/fengshui-room.webp', alt: '雅室风水插画' },
+  t3: { src: '/images/fengshui-luopan.webp', alt: '风水罗盘插画' }
+}
 
 const store = useProgressStore()
 const scenes = ['客厅', '卧室', '书桌', '玄关', '厨房', '办公位']
@@ -31,6 +38,7 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
       </div>
 
       <SceneArt :scene="active" class="scene-art" />
+      <LazyImage class="page-art" src="/images/fengshui-room.webp" alt="雅室风水插画" />
 
       <div class="grid">
         <FlipCard v-for="c in cards" :key="c.id" @open="store.readCard(c.id)">
@@ -60,6 +68,12 @@ const topic = ref(null)        // 当前专题（null = 翻卡列表态）
       <button class="btn btn-ghost" @click="topic = null">← 返回</button>
       <h1 class="page-title topic-head">{{ topic.icon }} {{ topic.title }}</h1>
       <p class="notice">☯ 以下内容为传统文化科普，仅供学习娱乐</p>
+      <LazyImage
+        v-if="topicArt[topic.id]"
+        class="page-art"
+        :src="topicArt[topic.id].src"
+        :alt="topicArt[topic.id].alt"
+      />
       <template v-for="(sec, i) in topic.sections" :key="i">
         <h3 class="sec-heading">{{ sec.heading }}</h3>
         <p class="sec-text">{{ sec.text }}</p>

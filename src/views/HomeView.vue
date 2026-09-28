@@ -9,6 +9,7 @@ import InkHero from '../components/art/InkHero.vue'
 import ModuleArt from '../components/art/ModuleArt.vue'
 import CloudDivider from '../components/art/CloudDivider.vue'
 import SealStamp from '../components/art/SealStamp.vue'
+import LazyImage from '../components/LazyImage.vue'
 import badges from '../data/badges.json'
 import lessons from '../data/lessons.json'
 
@@ -30,6 +31,13 @@ const modules = [
 <template>
   <div class="page">
     <InkHero class="hero" />
+
+    <LazyImage
+      class="photo-hero"
+      src="/images/taichi-landscape.webp"
+      alt="太极山水意境图"
+      :eager="true"
+    />
 
     <section class="daily card">
       <div class="daily-head">
@@ -79,6 +87,13 @@ const modules = [
 
 <style scoped>
 .hero { width: 100%; display: block; border-radius: 14px; margin-bottom: 14px; border: 1px solid var(--line); }
+.photo-hero {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
 .daily { text-align: center; background: linear-gradient(135deg, #fffdf7, #f3ecd9); position: relative; }
 .daily-head { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .daily-label { font-size: 12px; color: var(--cinnabar); letter-spacing: 4px; }
