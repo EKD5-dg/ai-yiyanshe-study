@@ -4,8 +4,8 @@ import { ref } from 'vue'
 const props = defineProps({
   src: { type: String, required: true },
   alt: { type: String, default: '' },
-  width: { type: [Number, String], default: 1280 },
-  height: { type: [Number, String], default: 853 },
+  width: { type: [Number, String], default: 1024 },
+  height: { type: [Number, String], default: 622 },
   // 首屏关键图设 true，其余默认懒加载
   eager: { type: Boolean, default: false }
 })
