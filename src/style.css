@@ -51,18 +51,7 @@ a { color: inherit; text-decoration: none; }
 }
 .tag-good { background: #e3f0e9; color: var(--good); }
 .tag-bad { background: #f7e3e3; color: var(--cinnabar); }
-.page { max-width: 960px; margin: 0 auto; padding: 20px 16px 80px; }
 .page-title { font-size: 22px; letter-spacing: 2px; margin-bottom: 4px; }
 .page-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
 .progress-track { height: 8px; background: var(--paper-2); border-radius: 4px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--cinnabar); border-radius: 4px; transition: width .3s; }
-/* 位图题图统一外观：圆角 + 细边框，弱网下由 LazyImage 占位。
-   收成居中画心，避免通栏大图把正文挤出首屏 */
-.page-art {
-  width: 100%;
-  max-width: 680px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  overflow: hidden;
-  margin: 0 auto 16px;
-}

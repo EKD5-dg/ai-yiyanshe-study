@@ -5,6 +5,7 @@ import { figureMap } from '../components/art/figureMap.js'
 import ChapterBanner from '../components/art/ChapterBanner.vue'
 import SealStamp from '../components/art/SealStamp.vue'
 import LazyImage from '../components/LazyImage.vue'
+import PageLayout from '../components/PageLayout.vue'
 import lessons from '../data/lessons.json'
 
 const store = useProgressStore()
@@ -66,7 +67,7 @@ function nextQuestion() {
 </script>
 
 <template>
-  <div class="page">
+  <PageLayout :layout="current ? 'wide' : 'rail'">
     <!-- 关卡地图 -->
     <template v-if="!current">
       <h1 class="page-title">📖 易经学堂</h1>
@@ -121,7 +122,7 @@ function nextQuestion() {
         <button class="btn" @click="current = null">返回关卡地图</button>
       </div>
     </template>
-  </div>
+  </PageLayout>
 </template>
 
 <style scoped>

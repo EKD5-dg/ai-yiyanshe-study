@@ -4,7 +4,7 @@ import { useProgressStore } from '../stores/progress'
 import { comboScore } from '../utils/scoring'
 import QuizBanner from '../components/art/QuizBanner.vue'
 import ScrollFrame from '../components/art/ScrollFrame.vue'
-import LazyImage from '../components/LazyImage.vue'
+import PageLayout from '../components/PageLayout.vue'
 import quizBank from '../data/quiz.json'
 
 const store = useProgressStore()
@@ -80,13 +80,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="page">
+  <PageLayout layout="rail">
     <!-- 开始 -->
     <div v-if="phase === 'start'" class="card center">
       <QuizBanner class="banner" />
       <h1 class="page-title">答题闯关</h1>
       <p class="page-sub">10 道题 · 每题 15 秒 · 3 条命 · 连击加分</p>
-      <LazyImage class="page-art quiz-art" src="/images/quiz-arena.webp" alt="山巅擂台闯关插画" />
       <p class="best">最佳成绩：{{ store.quizBest.score }} 分 / 连击 ×{{ store.quizBest.combo }}</p>
       <button class="btn" @click="start">开始挑战 ▶</button>
     </div>
@@ -123,13 +122,12 @@ onUnmounted(() => {
         <RouterLink to="/" class="btn btn-ghost" style="margin-left:10px">回首页</RouterLink>
       </div>
     </div>
-  </div>
+  </PageLayout>
 </template>
 
 <style scoped>
 .center { text-align: center; padding: 34px; }
 .banner { width: 170px; margin: 0 auto; display: block; }
-.quiz-art { max-width: 520px; margin: 12px auto 14px; }
 .over-actions { margin-top: 16px; }
 .best { font-size: 13px; color: var(--muted); margin: 8px 0 14px; }
 .hud { display: flex; gap: 16px; font-size: 15px; margin-bottom: 8px; }

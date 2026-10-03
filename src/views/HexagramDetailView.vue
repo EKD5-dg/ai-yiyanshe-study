@@ -8,6 +8,7 @@ import { bitsOf, cuogua, zonggua, hugua } from '../utils/relations'
 import HexagramFigure from '../components/HexagramFigure.vue'
 import TrigramIcon from '../components/art/TrigramIcon.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
+import PageLayout from '../components/PageLayout.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -40,7 +41,7 @@ const relations = computed(() => {
 </script>
 
 <template>
-  <div v-if="hex" class="page">
+  <PageLayout v-if="hex" layout="wide">
     <RouterLink to="/hexagrams" class="back">← 返回百科</RouterLink>
 
     <section class="card head">
@@ -111,7 +112,7 @@ const relations = computed(() => {
     </nav>
 
     <DisclaimerBar />
-  </div>
+  </PageLayout>
 </template>
 
 <style scoped>

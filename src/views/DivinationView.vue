@@ -5,7 +5,7 @@ import HexagramFigure from '../components/HexagramFigure.vue'
 import CoinFace from '../components/art/CoinFace.vue'
 import CloudPattern from '../components/art/CloudPattern.vue'
 import DisclaimerBar from '../components/DisclaimerBar.vue'
-import LazyImage from '../components/LazyImage.vue'
+import PageLayout from '../components/PageLayout.vue'
 
 const lines = ref([])        // 已掷出的爻（自下而上）
 const casting = ref(false)
@@ -34,10 +34,9 @@ onUnmounted(() => clearInterval(timer))
 </script>
 
 <template>
-  <div class="page">
+  <PageLayout layout="rail">
     <h1 class="page-title">🪙 趣味起卦</h1>
     <p class="page-sub">三枚铜钱摇六次，看看今天掷出什么卦</p>
-    <LazyImage class="page-art" src="/images/divination-coins.webp" alt="铜钱起卦插画" />
 
     <div class="stage card">
       <CloudPattern class="stage-cloud" />
@@ -75,7 +74,7 @@ onUnmounted(() => clearInterval(timer))
     </div>
 
     <DisclaimerBar />
-  </div>
+  </PageLayout>
 </template>
 
 <style scoped>
