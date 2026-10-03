@@ -128,10 +128,11 @@ function nextQuestion() {
 .chapter { margin-bottom: 20px; }
 .lesson-art {
   width: 100%;
+  max-width: 680px;
   border-radius: 12px;
   border: 1px solid var(--line);
   overflow: hidden;
-  margin-bottom: 16px;
+  margin: 0 auto 16px;
 }
 .ch-banner { width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
 .ch-name { margin-bottom: 10px; color: var(--ink-2); font-size: 15px; }

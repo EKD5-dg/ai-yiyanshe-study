@@ -89,8 +89,9 @@ const modules = [
 .hero { width: 100%; display: block; border-radius: 14px; margin-bottom: 14px; border: 1px solid var(--line); }
 .photo-hero {
   width: 100%;
+  max-width: 620px;
   border-radius: 14px;
-  margin-bottom: 14px;
+  margin: 0 auto 14px;
   border: 1px solid var(--line);
   overflow: hidden;
 }

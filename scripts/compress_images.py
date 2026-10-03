@@ -5,7 +5,7 @@
 # 直接落盘会让线上图片解码失败、页面留下空白占位块。
 #
 # 用法：python scripts/compress_images.py | node scripts/write_images.js
-from PIL import Image
+from PIL import Image, ImageEnhance
 import base64, io, os
 
 SRC_DIR = "vibe_images"
@@ -15,6 +15,10 @@ MAX_W = 1024
 QUALITY = 72
 # 出图工具在右下角压了半透明水印，裁掉的底部高度与图宽成正比（1280 宽时为 76px）
 WM_BOTTOM_RATIO = 76 / 1280
+# 站点是纸+墨（--paper 饱和度约 0.05），出图原样放上去会成为全页唯一高彩块、压过正文
+SATURATION = 0.65
+PAPER_WASH = 0.09
+PAPER_RGB = (0xFA, 0xF6, 0xED)  # 与 style.css 的 --paper 对齐
 
 for fn in sorted(os.listdir(OUT_DIR)):
     if not fn.endswith(".webp"):
@@ -24,6 +28,8 @@ for fn in sorted(os.listdir(OUT_DIR)):
         im = im.resize((MAX_W, round(im.size[1] * MAX_W / im.size[0])), Image.LANCZOS)
     w, h = im.size
     im = im.crop((0, 0, w, h - round(w * WM_BOTTOM_RATIO)))
+    im = ImageEnhance.Color(im).enhance(SATURATION)
+    im = Image.blend(im, Image.new("RGB", im.size, PAPER_RGB), PAPER_WASH)
     buf = io.BytesIO()
     im.save(buf, "WEBP", quality=QUALITY, method=6)
     print(f"{fn}\t{base64.b64encode(buf.getvalue()).decode()}")
